@@ -7,6 +7,11 @@ package com.leandro.camara;
  */
 public class StormYahooFinanceApplication {
 
+    /**
+     * Inicializa a topologia.
+     *
+     * @param args Parâmetros
+     */
     public static void main(String[] args) {
     }
 }
