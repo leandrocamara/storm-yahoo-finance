@@ -3,7 +3,7 @@ package com.leandro.camara;
 import com.leandro.camara.bolt.YahooFinanceBolt;
 import com.leandro.camara.spout.YahooFinanceSpout;
 import org.apache.storm.Config;
-import org.apache.storm.topology.ConfigurableTopology;
+import org.apache.storm.LocalCluster;
 import org.apache.storm.topology.TopologyBuilder;
 
 /**
@@ -11,26 +11,22 @@ import org.apache.storm.topology.TopologyBuilder;
  *
  * @author Leandro Câmara
  */
-public class YahooFinanceTopology extends ConfigurableTopology {
-
-    /**
-     * Inicializa a topologia.
-     *
-     * @param args Parâmetros
-     */
-    public static void main(String[] args) {
-        ConfigurableTopology.start(new YahooFinanceTopology(), args);
-    }
+public class YahooFinanceTopology {
 
     /**
      * Método responsável pela execução da Topologia 'Yahoo Finance'.
      *
-     * @param strings
-     * @return
-     * @throws Exception
+     * @param args Parâmetros
      */
-    protected int run(String[] strings) throws Exception {
-        return submit("YahooFinanceTopology", this.getConfig(), this.getTopologyBuilder());
+    public static void main(String[] args) throws Exception {
+        LocalCluster cluster = new LocalCluster();
+        try {
+            TopologyBuilder builder = getTopologyBuilder();
+            cluster.submitTopology("YahooFinanceTopology", getConfig(), builder.createTopology());
+            Thread.sleep(50000);
+        } catch (Exception e) {
+            cluster.shutdown();
+        }
     }
 
     /**
@@ -38,7 +34,7 @@ public class YahooFinanceTopology extends ConfigurableTopology {
      *
      * @return
      */
-    private TopologyBuilder getTopologyBuilder() {
+    private static TopologyBuilder getTopologyBuilder() {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("yahooSpout", new YahooFinanceSpout());
         builder.setBolt("yahooBolt", new YahooFinanceBolt()).shuffleGrouping("yahooSpout");
@@ -51,9 +47,10 @@ public class YahooFinanceTopology extends ConfigurableTopology {
      *
      * @return
      */
-    private Config getConfig() {
+    private static Config getConfig() {
         Config config = new Config();
         config.setDebug(true);
+        // config.put(Config.NIMBUS_SEEDS, "localhost:8888");
 
         return config;
     }
