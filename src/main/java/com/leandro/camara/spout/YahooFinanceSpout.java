@@ -19,6 +19,9 @@ import java.util.Map;
  */
 public class YahooFinanceSpout extends BaseRichSpout {
 
+    /**
+     * Coletor responsável pela criação da tupla e envio aos 'Bolts'.
+     */
     private SpoutOutputCollector collector;
 
     /**
@@ -27,15 +30,15 @@ public class YahooFinanceSpout extends BaseRichSpout {
      * @param spoutOutputCollector
      */
     public void open(Map<String, Object> map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
-        this.collector = collector;
+        this.collector = spoutOutputCollector;
     }
 
     /**
-     *
+     * Método responsável pela obtenção dos dados, a serem transmitidos por meio de tuplas.
      */
     public void nextTuple() {
         try {
-            String symbolCompany = "GOOG";
+            String symbolCompany = "GOOG"; // Google
             StockQuote quote = this.getCompanyQuoteBySymbol(symbolCompany);
 
             this.collector.emit(new Values(
@@ -51,13 +54,17 @@ public class YahooFinanceSpout extends BaseRichSpout {
     }
 
     /**
+     * Define os campos das tuplas (resultantes).
+     *
      * @param outputFieldsDeclarer
      */
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("company", "timestamp", "price", "previousClose"));
+        outputFieldsDeclarer.declare(new Fields("company", "currentDate", "price", "previousClose"));
     }
 
     /**
+     * Retorna a cotação de acordo com o código (symbol) da compania/empresa.
+     *
      * @param symbol
      * @return
      * @throws IOException
@@ -67,6 +74,8 @@ public class YahooFinanceSpout extends BaseRichSpout {
     }
 
     /**
+     * Retorna o preço da cotação informada.
+     *
      * @param quote
      * @return
      */
@@ -75,6 +84,7 @@ public class YahooFinanceSpout extends BaseRichSpout {
     }
 
     /**
+     * Retorna o preço de fechamento do dia anterior, da cotação informada.
      * @param quote
      * @return
      */
@@ -83,11 +93,14 @@ public class YahooFinanceSpout extends BaseRichSpout {
     }
 
     /**
+     * Retorna a data atual.
+     *
      * @return
      */
     private String getCurrentDate() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+
         return simpleDateFormat.format(timestamp);
     }
 }
