@@ -50,7 +50,6 @@ public class YahooFinanceTopology {
     private static Config getConfig() {
         Config config = new Config();
         config.setDebug(true);
-        // config.put(Config.NIMBUS_SEEDS, "localhost:8888");
 
         return config;
     }

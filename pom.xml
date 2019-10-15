@@ -13,18 +13,16 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-client</artifactId>
             <version>2.0.0</version>
-            <scope>${provided.scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-server</artifactId>
             <version>2.0.0</version>
-            <scope>${provided.scope}</scope>
         </dependency>
         <dependency>
             <groupId>com.yahoofinance-api</groupId>
             <artifactId>YahooFinanceAPI</artifactId>
-            <version>3.5.0</version>
+            <version>3.15.0</version>
         </dependency>
     </dependencies>
 </project>

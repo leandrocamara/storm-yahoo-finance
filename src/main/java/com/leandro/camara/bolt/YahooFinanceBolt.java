@@ -4,6 +4,7 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
@@ -56,7 +57,9 @@ public class YahooFinanceBolt extends BaseBasicBolt {
      *
      * @param outputFieldsDeclarer
      */
-    public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {}
+    public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
+        outputFieldsDeclarer.declare(new Fields("company", "currentDate", "price", "previousClose"));
+    }
 
     /**
      * Método executado após a finalização da execução do 'Bolt'.
